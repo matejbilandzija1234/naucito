@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nauči.to | Nacionalni Kurikulum Cloud</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --p: #0066ff; --bg: #05070a; --c: #111827; --t: #ffffff; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--t); margin: 0; }
+        header { padding: 80px 5% 40px; text-align: center; background: radial-gradient(circle at top, #1e3a8a 0%, var(--bg) 70%); }
+        .logo { font-size: 3.5rem; font-weight: 900; letter-spacing: -3px; margin: 0; }
+        .cloud-nav { display: flex; gap: 10px; padding: 20px 5%; overflow-x: auto; background: var(--c); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #1e293b; }
+        .nav-btn { background: #1f2937; color: white; border: 1px solid #374151; padding: 12px 25px; border-radius: 12px; cursor: pointer; white-space: nowrap; font-weight: 600; }
+        .nav-btn.active { background: var(--p); border-color: var(--p); box-shadow: 0 0 15px rgba(0,102,255,0.4); }
+        .content { padding: 40px 5%; max-width: 1400px; margin: 0 auto; }
+        .subject-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: var(--c); padding: 30px; border-radius: 20px; border: 1px solid #1e293b; transition: 0.3s; cursor: pointer; }
+        .card:hover { transform: translateY(-5px); border-color: var(--p); background: #1c2533; }
+        .card-tag { font-size: 0.7rem; color: var(--p); font-weight: bold; text-transform: uppercase; }
+        #viewer { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 2000; padding: 50px; overflow-y: auto; }
+        .viewer-container { max-width: 800px; margin: 0 auto; line-height: 1.8; font-size: 1.1rem; }
+        .back-btn { background: var(--p); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 class="logo">NAUČI.TO <span style="color:var(--p)">CLOUD</span></h1>
+    <p style="color:#9ca3af;">Službena baza svih gradiva RH u oblaku.</p>
+</header>
+
+<div class="cloud-nav">
+    <button class="nav-btn active" onclick="loadCategory('os')">Osnovna Škola</button>
+    <button class="nav-btn" onclick="loadCategory('gim')">Gimnazije</button>
+    <button class="nav-btn" onclick="loadCategory('med')">Medicinska</button>
+    <button class="nav-btn" onclick="loadCategory('eko')">Ekonomska</button>
+    <button class="nav-btn" onclick="loadCategory('teh')">Tehnička/IT</button>
+    <button class="nav-btn" onclick="loadCategory('jezici')">Jezici (ENG/LAT/DE)</button>
+</div>
+
+<div class="content">
+    <div id="status" style="text-align: center; color: var(--p); margin-bottom: 20px;">Odaberi kategoriju iznad...</div>
+    <div class="subject-grid" id="mainGrid"></div>
+</div>
+
+<div id="viewer">
+    <div class="viewer-container">
+        <button class="back-btn" onclick="closeViewer()">← Natrag</button>
+        <div id="lessonBody"></div>
+    </div>
+</div>
+
+<script>
+    const cloudDatabase = {
+        'os': [
+            { id: 1, s: 'Povijest', t: 'Prvi svjetski rat', c: '<h2>Prvi svjetski rat (1914.-1918.)</h2><p>Povod: Atentat u Sarajevu. Dvije strane: Antanta i Središnje sile. Završetak: Raspad Austro-Ugarske.</p>' },
+            { id: 2, s: 'Geografija', t: 'Reljef Hrvatske', c: '<h2>Reljef RH</h2><p>Hrvatska se dijeli na panonski, gorski i jadranski reljefni prostor.</p>' }
+        ],
+        'gim': [
+            { id: 3, s: 'Povijest', t: 'Francuska revolucija', c: '<h2>1789. godina</h2><p>Pad Bastille, Deklaracija o pravima čovjeka i građanina. Kraj apsolutizma.</p>' },
+            { id: 4, s: 'Geografija', t: 'Atmosfera i Klima', c: '<h2>Slojevi atmosfere</h2><p>Troposfera, stratosfera, mezosfera... Utjecaj stakleničkih plinova.</p>' }
+        ],
+        'med': [
+            { id: 5, s: 'Anatomija', t: 'Sustav mišića', c: '<h2>Mišići (Musculi)</h2><p>Poprečno-prugasti, glatki i srčani mišić. Više od 600 mišića u tijelu.</p>' },
+            { id: 6, s: 'Njega', t: 'Vitalni znakovi', c: '<h2>Mjerenje pulsa i tlaka</h2><p>Normalan tlak: 120/80 mmHg. Normalan puls: 60-80 otkucaja u minuti.</p>' }
+        ],
+        'jezici': [
+            { id: 7, s: 'Engleski', t: 'Present Simple vs Continuous', c: '<h2>Grammar</h2><p><b>Present Simple:</b> I work (every day).<br><b>Present Continuous:</b> I am working (now).</p>' },
+            { id: 8, s: 'Latinski', t: 'Prva deklinacija (A)', c: '<h2>Deklinacije</h2><p>Rosa, rosae, rosae, rosam, rosa, rosa... Imenice ženskog roda.</p>' }
+        ],
+        'eko': [
+            { id: 9, s: 'Pravo', t: 'Radno pravo', c: '<h2>Ugovor o radu</h2><p>Obvezni podaci: plaća, radno mjesto, trajanje godišnjeg odmora.</p>' }
+        ],
+        'teh': [
+            { id: 10, s: 'Strojarstvo', t: 'Tehničko crtanje', c: '<h2>Kotiranje</h2><p>Pravila označavanja dimenzija na tehničkom nacrtu prema ISO standardima.</p>' }
+        ]
+    };
+
+    function loadCategory(cat) {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        if(event) event.target.classList.add('active');
+        const grid = document.getElementById('mainGrid');
+        grid.innerHTML = "";
+        document.getElementById('status').innerText = `Učitana baza: ${cat.toUpperCase()}`;
+        const items = cloudDatabase[cat] || [];
+        items.forEach(item => {
+            grid.innerHTML += `<div class="card" onclick="openLesson('${cat}', ${item.id})"><span class="card-tag">${item.s}</span><h3>${item.t}</h3><p>Službeni kurikulum RH.</p></div>`;
+        });
+    }
+
+    function openLesson(cat, id) {
+        const item = cloudDatabase[cat].find(x => x.id === id);
+        document.getElementById('lessonBody').innerHTML = item.c;
+        document.getElementById('viewer').style.display = 'block';
+    }
+
+    function closeViewer() { document.getElementById('viewer').style.display = 'none'; }
+    window.onload = () => loadCategory('os');
+</script>
+</body>
+</html>
