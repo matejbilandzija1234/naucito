@@ -2,121 +2,134 @@
 <html lang="hr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WikiŠkola | Sadržaj svih gradiva</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>WikiŠkola | Sva gradiva 1.-8. razred</title>
     <style>
-        :root { --p: #0066ff; --bg: #ffffff; --side: #f8f9fa; --txt: #1a1a1a; --border: #e1e4e8; }
-        body { font-family: 'Inter', sans-serif; margin: 0; display: flex; color: var(--txt); background: var(--bg); }
+        :root { --p: #0066ff; --bg: #f4f7f6; --txt: #2c3e50; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; background: var(--bg); color: var(--txt); height: 100vh; }
         
-        /* Lijevi izbornik - Predmeti */
-        .sidebar { width: 260px; background: var(--side); border-right: 1px solid var(--border); height: 100vh; position: sticky; top: 0; padding: 20px; overflow-y: auto; }
-        .sidebar h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: 20px; color: var(--p); text-transform: uppercase; letter-spacing: 1px; }
-        .nav-item { padding: 12px 15px; cursor: pointer; border-radius: 8px; margin-bottom: 5px; font-weight: 600; transition: 0.2s; color: #444; }
-        .nav-item:hover { background: #eef2ff; color: var(--p); }
-        .nav-item.active { background: var(--p); color: white; }
+        /* Lijevi izbornik - RAZREDI */
+        .sidebar { width: 220px; background: #1a1c23; color: white; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .sidebar h2 { font-size: 1.2rem; color: var(--p); border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .class-btn { padding: 12px; background: #2a2d37; border: none; color: white; border-radius: 8px; cursor: pointer; text-align: left; font-weight: bold; }
+        .class-btn:hover, .class-btn.active { background: var(--p); }
 
-        /* Sredina - Popis gradiva (Sadržaj) */
-        .main-content { flex: 1; padding: 40px; max-width: 900px; }
-        .subject-info { margin-bottom: 30px; border-bottom: 2px solid var(--p); padding-bottom: 10px; }
-        .subject-info h1 { font-size: 2.5rem; margin: 0; }
+        /* Sredina - PREDMETI I LEKCIJE */
+        .main { flex: 1; padding: 40px; overflow-y: auto; }
+        .header-info { margin-bottom: 30px; }
+        .subject-box { background: white; border-radius: 15px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .subject-title { font-size: 1.4rem; font-weight: 800; color: var(--p); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         
-        .gradivo-list { display: flex; flex-direction: column; gap: 10px; }
-        .gradivo-item { padding: 20px; border: 1px solid var(--border); border-radius: 12px; cursor: pointer; transition: 0.3s; display: flex; justify-content: space-between; align-items: center; }
-        .gradivo-item:hover { border-color: var(--p); background: #f0f7ff; transform: translateX(5px); }
-        .gradivo-item h3 { margin: 0; font-size: 1.1rem; }
-        .tag { font-size: 0.7rem; background: #eee; padding: 3px 8px; border-radius: 4px; font-weight: bold; }
+        .lesson-link { display: block; padding: 10px; border-bottom: 1px solid #eee; text-decoration: none; color: #444; cursor: pointer; transition: 0.2s; }
+        .lesson-link:hover { background: #f0f7ff; color: var(--p); padding-left: 20px; }
 
-        /* Pregled lekcije (Preko cijelog ekrana) */
-        #viewer { display: none; position: fixed; inset: 0; background: white; z-index: 100; padding: 60px; overflow-y: auto; }
-        .viewer-inner { max-width: 750px; margin: 0 auto; line-height: 1.8; font-size: 1.15rem; }
-        .close-btn { position: absolute; top: 20px; right: 40px; background: #f00; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        /* Puna lekcija preko ekrana */
+        #viewer { display: none; position: fixed; inset: 0; background: white; z-index: 1000; padding: 60px; overflow-y: auto; }
+        .viewer-content { max-width: 800px; margin: 0 auto; line-height: 1.8; font-size: 1.2rem; }
+        .close-btn { position: fixed; top: 20px; right: 40px; background: #ff4757; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
         
-        /* Stilovi unutar lekcije */
-        .highlight { background: #fff9c4; border-bottom: 2px solid #fbc02d; font-weight: bold; }
-        .example { background: #f1f8e9; border-left: 5px solid #4caf50; padding: 15px; margin: 20px 0; border-radius: 5px; }
-        .formula { display: block; text-align: center; font-size: 1.5rem; background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: monospace; border: 1px solid #ddd; }
+        .highlight { background: #fff3cd; padding: 2px 5px; border-radius: 3px; font-weight: bold; }
+        .formula { display: block; text-align: center; font-size: 1.8rem; background: #f8f9fa; padding: 20px; border: 1px dashed var(--p); margin: 20px 0; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <h2>WIKI ŠKOLA</h2>
-    <div class="nav-item active" onclick="prikazi('HRVATSKI')">Hrvatski Jezik</div>
-    <div class="nav-item" onclick="prikazi('MATEMATIKA')">Matematika</div>
-    <div class="nav-item" onclick="prikazi('PRIRODA')">Priroda i Biologija</div>
-    <div class="nav-item" onclick="prikazi('POVIJEST')">Povijest</div>
-    <div class="nav-item" onclick="prikazi('GEOGRAFIJA')">Geografija</div>
-    <div class="nav-item" onclick="prikazi('FIZIKA')">Fizika</div>
-    <div class="nav-item" onclick="prikazi('KEMIJA')">Kemija</div>
-    <div class="nav-item" onclick="prikazi('ENGLESKI')">Engleski Jezik</div>
+    <h2>RAZREDI</h2>
+    <button class="class-btn active" onclick="prikaziRazred(1)">1. RAZRED</button>
+    <button class="class-btn" onclick="prikaziRazred(2)">2. RAZRED</button>
+    <button class="class-btn" onclick="prikaziRazred(3)">3. RAZRED</button>
+    <button class="class-btn" onclick="prikaziRazred(4)">4. RAZRED</button>
+    <button class="class-btn" onclick="prikaziRazred(5)">5. RAZRED</button>
+    <button class="class-btn" onclick="prikaziRazred(6)">6. RAZRED</button>
+    <button class="class-btn" onclick="prikaziRazred(7)">7. RAZRED</button>
+    <button class="class-btn" onclick="prikaziRazred(8)">8. RAZRED</button>
 </div>
 
-<div class="main-content">
-    <div class="subject-info">
-        <h1 id="subName">Hrvatski Jezik</h1>
-        <p>Odaberi gradivo iz sadržaja ispod za učenje:</p>
+<div class="main">
+    <div class="header-info">
+        <h1 id="razredNaslov">1. Razred Osnovne Škole</h1>
+        <p>Popis svih predmeta i gradiva prema nacionalnom kurikulumu.</p>
     </div>
-    <div class="gradivo-list" id="popisGradiva">
-        </div>
+    <div id="predmetiContainer"></div>
 </div>
 
 <div id="viewer">
-    <div class="viewer-inner">
+    <div class="viewer-content">
         <button class="close-btn" onclick="zatvori()">ZATVORI X</button>
-        <div id="lekcijaText"></div>
+        <div id="lekcijaSadrzaj"></div>
     </div>
 </div>
 
 <script>
-const data = {
-    'HRVATSKI': [
-        { t: 'Padeži (Svi)', l: 'Lekcija 1', c: '<h2>Padeži u hrvatskom jeziku</h2><p>Padeža ima 7. Evo kako ih najlakše zapamtiti:</p><ul><li><b>Nominativ:</b> Tko? Što? <span class="highlight">(Žaba)</span></li><li><b>Genitiv:</b> Koga? Čega? (Nema žabe)</li><li><b>Dativ:</b> Komu? Čemu? (Prilazim žabi)</li><li><b>Akuzativ:</b> Koga? Što? (Vidim žabu)</li><li><b>Vokativ:</b> Oj! Ej! (Oj, žabo!)</li><li><b>Lokativ:</b> O kome? O čemu? (Pričam o žabi)</li><li><b>Instrumental:</b> S kime? Čime? (Šetam sa žabom)</li></ul><div class="example"><b>Primjer:</b> Rečenica "Marko vidi psa" -> Marko je Nominativ (Tko vidi?), psa je Akuzativ (Koga vidi?).</div>' },
-        { t: 'Glagolska vremena', l: 'Lekcija 2', c: '<h2>Prezent, Perfekt i Futur</h2><p><b>Prezent:</b> Sadašnjost (Radim).<br><b>Perfekt:</b> Prošlost (Radio sam).<br><b>Futur I:</b> Budućnost (Radit ću).</p>' }
-    ],
-    'MATEMATIKA': [
-        { t: 'Tablica množenja', l: 'Osnovne operacije', c: '<h2>Tablica množenja</h2><p>Množenje je skraćeno zbrajanje.</p><div class="formula">8 x 7 = 56</div><div class="example"><b>Trik za broj 9:</b> Zbroj znamenki rezultata uvijek mora biti 9! (9, 18, 27, 36...)</div>' },
-        { t: 'Površina likova', l: 'Geometrija', c: '<h2>Površine likova</h2><p><b>Kvadrat:</b> P = a * a</p><p><b>Pravokutnik:</b> P = a * b</p><div class="formula">P = a * b</div>' }
-    ],
-    'PRIRODA': [
-        { t: 'Fotosinteza', l: 'Biljke', c: '<h2>Fotosinteza</h2><p>Proces stvaranja hrane kod biljaka.</p><div class="example">Sunčeva svjetlost + CO2 + Voda = Kisik + Šećer.</div>' }
-    ],
-    'POVIJEST': [
-        { t: 'Lenta vremena', l: 'Uvod', c: '<h2>Povijesna razdoblja</h2><ul><li>Stari vijek (Grčka, Rim)</li><li>Srednji vijek (Vitezovi)</li><li>Novi vijek (Otkrića)</li></ul>' }
-    ],
-    'GEOGRAFIJA': [
-        { t: 'Planeti', l: 'Svemir', c: '<h2>Sunčev sustav</h2><p>Merkur, Venera, Zemlja, Mars, Jupiter, Saturn, Uran, Neptun.</p>' }
-    ],
-    'FIZIKA': [
-        { t: 'Gustoća', l: 'Mehanika', c: '<h2>Gustoća (rho)</h2><div class="formula">ρ = m / V</div><p>Gustoća je masa podijeljena s volumenom.</p>' }
-    ]
+const bazaZnanja = {
+    1: {
+        'Hrvatski jezik': [
+            { t: 'Veliko i malo tiskano slovo', c: '<h1>Slova abecede</h1><p>U prvom razredu učimo pisati sva velika i mala slova. <span class="highlight">Rečenica uvijek počinje velikim slovom!</span></p>' },
+            { t: 'Rastavljanje riječi na slogove', c: '<h1>Slogovi</h1><p>Riječ "MAMA" ima dva sloga: MA-MA. Riječ "ŠKOLA" ima dva sloga: ŠKO-LA.</p>' }
+        ],
+        'Matematika': [
+            { t: 'Brojevi do 20', c: '<h1>Zbrajanje i oduzimanje</h1><p>Učimo zbrajati unutar prve desetice, a zatim i do 20.</p><div class="formula">5 + 3 = 8</div>' },
+            { t: 'Geometrijska tijela i likovi', c: '<h1>Likovi</h1><p>Kvadrat, krug, trokut i pravokutnik.</p>' }
+        ],
+        'Priroda i društvo': [
+            { t: 'Škola i dom', c: '<h1>Ponašanje u školi</h1><p>Učimo put od kuće do škole i kako se ponašati u razredu.</p>' }
+        ]
+    },
+    5: {
+        'Hrvatski jezik': [
+            { t: 'Promjenjive i nepromjenjive riječi', c: '<h1>Vrste riječi</h1><p>Imenice, glagoli i pridjevi mijenjaju svoj oblik.</p>' }
+        ],
+        'Matematika': [
+            { t: 'Razlomci - uvod', c: '<h1>Što je razlomak?</h1><p>Razlomak označava dio cjeline.</p><div class="formula">1 / 2 (polovica)</div>' },
+            { t: 'Skupovi brojeva', c: '<h1>Prirodni brojevi</h1><p>Skup N = {1, 2, 3, 4, ...}</p>' }
+        ],
+        'Povijest': [
+            { t: 'Lenta vremena i računanje vremena', c: '<h1>Povijest</h1><p>Učimo o erama: prije nove ere i nove ere.</p>' }
+        ],
+        'Geografija': [
+            { t: 'Zemlja u svemiru', c: '<h1>Planeti</h1><p>Zemlja je treći planet od Sunca.</p>' }
+        ]
+    },
+    7: {
+        'Fizika': [
+            { t: 'Tijela i tvari', c: '<h1>Fizika uvod</h1><p>Sve oko nas je tvar i zauzima prostor.</p>' },
+            { t: 'Gustoća tvari', c: '<h1>Gustoća</h1><div class="formula">rho = m / V</div>' }
+        ],
+        'Kemija': [
+            { t: 'Kemijske promjene', c: '<h1>Promjene tvari</h1><p>Fizikalne (promjena oblika) i Kemijske (nastaje nešto novo).</p>' }
+        ]
+    }
+    // Ovdje možemo dopisati 2, 3, 4, 6, 8 razred na isti način
 };
 
-function prikazi(sub) {
-    // Aktiviraj gumb u izborniku
-    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+function prikaziRazred(r) {
+    // Označi aktivni gumb
+    document.querySelectorAll('.class-btn').forEach(b => b.classList.remove('active'));
     event.target.classList.add('active');
 
-    document.getElementById('subName').innerText = sub.charAt(0) + sub.slice(1).toLowerCase();
-    const popis = document.getElementById('popisGradiva');
-    popis.innerHTML = "";
+    document.getElementById('razredNaslov').innerText = r + ". Razred Osnovne Škole";
+    const container = document.getElementById('predmetiContainer');
+    container.innerHTML = "";
 
-    data[sub].forEach((item, index) => {
-        popis.innerHTML += `
-            <div class="gradivo-item" onclick="otvoriLekciju('${sub}', ${index})">
-                <div>
-                    <span class="tag">${item.l}</span>
-                    <h3>${item.t}</h3>
-                </div>
-                <span style="color:var(--p); font-weight:bold;">→</span>
-            </div>
-        `;
-    });
+    const predmeti = bazaZnanja[r];
+    if(!predmeti) {
+        container.innerHTML = "<p>Gradivo za ovaj razred se trenutno učitava u bazu...</p>";
+        return;
+    }
+
+    for (let predmet in predmeti) {
+        let box = `<div class="subject-box"><div class="subject-title">📘 ${predmet}</div>`;
+        predmeti[predmet].forEach((lekcija, index) => {
+            box += `<div class="lesson-link" onclick="otvoriLekciju(${r}, '${predmet}', ${index})">${lekcija.t}</div>`;
+        });
+        box += `</div>`;
+        container.innerHTML += box;
+    }
 }
 
-function otvoriLekciju(sub, index) {
-    const lekcija = data[sub][index];
-    document.getElementById('lekcijaText').innerHTML = lekcija.c;
+function otvoriLekciju(r, p, i) {
+    const lekcija = bazaZnanja[r][p][i];
+    document.getElementById('lekcijaSadrzaj').innerHTML = lekcija.c;
     document.getElementById('viewer').style.display = 'block';
 }
 
@@ -124,8 +137,8 @@ function zatvori() {
     document.getElementById('viewer').style.display = 'none';
 }
 
-// Početno učitavanje
-window.onload = () => prikazi('HRVATSKI');
+// Početno učitaj 1. razred
+window.onload = () => prikaziRazred(1);
 </script>
 
 </body>
