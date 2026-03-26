@@ -2,163 +2,137 @@
 <html lang="hr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nauči.to | Nacionalni Arhiv Znanja</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <title>Nauči.to | Sva Gradiva RH</title>
     <style>
-        :root { --p: #0066ff; --bg: #05070a; --c: #111827; --t: #ffffff; --dim: #9ca3af; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--t); margin: 0; overflow-x: hidden; }
-        
-        /* Navigacijski sustav */
-        header { padding: 40px 5%; background: #0a0f18; border-bottom: 2px solid var(--p); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 2.5rem; font-weight: 900; color: var(--p); letter-spacing: -2px; }
-        
-        .cat-bar { display: flex; overflow-x: auto; gap: 10px; padding: 15px 5%; background: var(--c); scrollbar-width: none; border-bottom: 1px solid #1e293b; }
-        .cat-btn { background: #1f2937; color: white; border: 1px solid #374151; padding: 10px 20px; border-radius: 8px; cursor: pointer; white-space: nowrap; font-weight: 600; font-size: 0.8rem; }
-        .cat-btn.active { background: var(--p); border-color: var(--p); }
-
-        /* Mreža gradiva */
-        .main { padding: 30px 5% 100px; }
-        .subject-title { border-left: 4px solid var(--p); padding-left: 15px; margin: 40px 0 20px; font-size: 1.5rem; text-transform: uppercase; }
+        :root { --p: #0070f3; --bg: #050505; --c: #111; --t: #eee; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--t); margin: 0; }
+        header { padding: 40px 5%; text-align: center; border-bottom: 2px solid var(--p); background: #000; }
+        .nav { display: flex; overflow-x: auto; gap: 10px; padding: 20px; background: var(--c); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #333; }
+        .btn { padding: 12px 25px; background: #222; color: #fff; border: 1px solid #444; cursor: pointer; border-radius: 8px; font-weight: bold; white-space: nowrap; transition: 0.3s; }
+        .btn:hover, .btn.active { background: var(--p); border-color: var(--p); }
+        .container { padding: 30px 5%; }
+        .subject-name { color: var(--p); font-size: 1.8rem; border-left: 5px solid var(--p); padding-left: 15px; margin: 40px 0 20px; text-transform: uppercase; letter-spacing: 1px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        
-        .card { background: var(--c); padding: 25px; border-radius: 15px; border: 1px solid #1e293b; transition: 0.3s; cursor: pointer; }
-        .card:hover { border-color: var(--p); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,102,255,0.1); }
-        .card h4 { margin: 0 0 10px; color: var(--p); }
-        .card p { color: var(--dim); font-size: 0.85rem; line-height: 1.5; }
-
-        /* Preglednik lekcije */
-        #viewer { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 2000; padding: 30px; overflow-y: auto; }
-        .view-box { max-width: 900px; margin: 0 auto; background: var(--c); padding: 40px; border-radius: 20px; border: 1px solid var(--p); }
-        .close-btn { background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-bottom: 20px; }
-        
-        /* Sadržaj lekcije */
-        .content h2 { color: var(--p); font-size: 2rem; }
-        .content h3 { border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .formula { background: #000; padding: 15px; border-radius: 10px; color: var(--p); font-family: monospace; font-size: 1.2rem; text-align: center; margin: 20px 0; }
-        .highlight { border-left: 4px solid var(--p); padding-left: 15px; font-style: italic; background: #1a2233; padding: 10px; }
+        .card { background: #111; padding: 25px; border-radius: 12px; border: 1px solid #222; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
+        .card:hover { border-color: var(--p); transform: translateY(-5px); background: #161616; }
+        .card h3 { margin: 0 0 10px; font-size: 1.3rem; }
+        .card p { color: #999; font-size: 0.9rem; margin: 0; }
+        #viewer { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; padding: 40px; overflow-y: auto; }
+        .inner { max-width: 900px; margin: 0 auto; background: #111; padding: 40px; border-radius: 20px; border: 1px solid var(--p); line-height: 1.8; }
+        .close { background: #ff4d4d; color: #fff; border: none; padding: 10px 25px; cursor: pointer; font-weight: bold; border-radius: 5px; margin-bottom: 20px; }
+        .example { background: #1a1a1a; padding: 15px; border-radius: 8px; border-left: 4px solid #00ff00; margin: 15px 0; color: #ccc; font-style: italic; }
+        .formula { background: #000; padding: 20px; text-align: center; border-radius: 10px; border: 1px dashed var(--p); color: var(--p); font-size: 1.5rem; margin: 20px 0; font-family: monospace; }
+        b { color: var(--p); }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">NAUČI.TO <span style="font-weight:300; font-size:1rem; color:white; vertical-align:middle; border:1px solid #333; padding:2px 8px; border-radius:5px;">FULL ARCHIVE</span></div>
-    <div style="font-size: 0.8rem; color: var(--dim); margin-top: 5px;">Sve razine • Svi predmeti • Sva gradiva</div>
+    <h1 style="font-size:3rem; margin:0;">NAUČI.TO <span style="color:var(--p)">GRADIVA</span></h1>
+    <p style="color:#777;">Svi predmeti • Sve lekcije • Primjeri za lakše učenje</p>
 </header>
 
-<div class="cat-bar">
-    <button class="cat-btn active" onclick="load('os')">OSNOVNA ŠKOLA (1-8)</button>
-    <button class="cat-btn" onclick="load('gim')">GIMNAZIJA</button>
-    <button class="cat-btn" onclick="load('med')">MEDICINSKA</button>
-    <button class="cat-btn" onclick="load('eko')">EKONOMSKA/PRAVNA</button>
-    <button class="cat-btn" onclick="load('teh')">TEHNIČKA/IT</button>
-    <button class="cat-btn" onclick="load('faks')">FAKULTETI (STEM/DRUŠT)</button>
+<div class="nav" id="catNav">
+    <button class="btn active" onclick="prikazi('os')">OSNOVNA ŠKOLA</button>
+    <button class="btn" onclick="prikazi('ss')">GIMNAZIJA</button>
+    <button class="btn" onclick="prikazi('med')">MEDICINSKA</button>
+    <button class="btn" onclick="prikazi('eko')">EKONOMSKA</button>
+    <button class="btn" onclick="prikazi('teh')">TEHNIČKA / IT</button>
 </div>
 
-<div class="main" id="mainDisplay">
-    </div>
+<div class="container" id="display"></div>
 
 <div id="viewer">
-    <div class="view-box">
-        <button class="close-btn" onclick="closeV()">ZATVORI [X]</button>
-        <div id="lessonText" class="content"></div>
+    <div class="inner">
+        <button class="close" onclick="zatvori()">← NATRAG NA POPIS</button>
+        <div id="content"></div>
     </div>
 </div>
 
 <script>
-    // GIGANTSKA BAZA KOJA ĆE SADRŽAVATI "SVE"
-    const data = {
-        'os': {
-            'MATEMATIKA': [
-                { t: 'Zbrajanje i oduzimanje', d: 'Osnove za 1. i 2. razred.', c: '<h2>Matematika: Zbrajanje</h2><p>Pribrojnik + Pribrojnik = Zbroj.</p><div class="formula">15 + 25 = 40</div>' },
-                { t: 'Geometrija (Kutovi)', d: 'Vrste kutova i mjerenje.', c: '<h2>Kutovi</h2><p>Pravi (90°), Šiljasti (<90°), Tupi (>90°).</p>' }
-            ],
-            'HRVATSKI': [
-                { t: 'Imenice, Glagoli, Pridjevi', d: 'Glavne vrste riječi.', c: '<h2>Vrste riječi</h2><p><b>Imenice:</b> Stol, mama, grad.<br><b>Glagoli:</b> Trčati, učiti, spavati.</p>' }
-            ],
-            'PRIRODA / BIOLOGIJA': [
-                { t: 'Životinjsko carstvo', d: 'Kralježnjaci i beskralježnjaci.', c: '<h2>Svijet životinja</h2><p>Sisavci, ptice, gmazovi, vodozemci i ribe.</p>' }
-            ]
-        },
-        'gim': {
-            'FIZIKA': [
-                { t: 'Mehanika (Newton)', d: 'Tri osnovna zakona gibanja.', c: '<h2>Isaac Newton</h2><div class="formula">F = m · a</div>' }
-            ],
-            'KEMIJA': [
-                { t: 'Periodni sustav', d: 'Elementi i njihova svojstva.', c: '<h2>PSE</h2><p>Metali, nemetali, plemeniti plinovi.</p>' }
-            ],
-            'POV / GEO': [
-                { t: 'Velika geografska otkrića', d: 'Kolumb, Magellan, Vasco da Gama.', c: '<h2>Otkriće Amerike</h2><p>1492. godina - prekretnica u povijesti.</p>' }
-            ]
-        },
-        'med': {
-            'ANATOMIJA': [
-                { t: 'Osteologija (Kosti)', d: 'Građa kostura čovjeka.', c: '<h2>Sustav kostiju</h2><p>Ukupno 206 kostiju kod odrasle osobe.</p>' }
-            ],
-            'FARMAKOLOGIJA': [
-                { t: 'Vrste lijekova', d: 'Analgetici, antibiotici, antipiretici.', c: '<h2>Uvod u farmaciju</h2><p>Lijekovi i njihovo djelovanje na receptore.</p>' }
-            ]
-        },
-        'eko': {
-            'KNJIGOVODSTVO': [
-                { t: 'Bilanca stanja', d: 'Aktiva i pasiva u poduzeću.', c: '<h2>Bilanca</h2><div class="highlight">Aktiva = Pasiva</div>' }
-            ],
-            'PRAVO': [
-                { t: 'Ustav RH', d: 'Temelji države i trodioba vlasti.', c: '<h2>Ustav Republike Hrvatske</h2><p>Sabor, Vlada, Sudstvo.</p>' }
-            ]
-        },
-        'teh': {
-            'RAČUNALSTVO': [
-                { t: 'Strukture podataka', d: 'Nizovi, liste, stabla.', c: '<h2>Algoritmi</h2><p>Kako računala organiziraju podatke.</p>' }
-            ],
-            'ELEKTROTEHNIKA': [
-                { t: 'Ohmov zakon', d: 'Napon, struja i otpor.', c: '<h2>Ohm</h2><div class="formula">U = I · R</div>' }
-            ]
-        },
-        'faks': {
-            'METODOLOGIJA': [
-                { t: 'Pisanje seminara', d: 'Pravila akademskog pisanja.', c: '<h2>Akademski rad</h2><p>Uvod, citiranje, literatura.</p>' }
-            ],
-            'STATISTIKA': [
-                { t: 'Vjerojatnost', d: 'Osnovni koncepti i formule.', c: '<h2>Teorija vjerojatnosti</h2><p>P(A) = povoljni / mogući ishodi.</p>' }
-            ]
-        }
-    };
-
-    function load(cat) {
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
-        const display = document.getElementById('mainDisplay');
-        display.innerHTML = "";
-        
-        const subjects = data[cat];
-        for (const [subject, lessons] of Object.entries(subjects)) {
-            let section = `<div><div class="subject-title">${subject}</div><div class="grid">`;
-            lessons.forEach((l, idx) => {
-                section += `<div class="card" onclick="view('${cat}', '${subject}', ${idx})">
-                    <h4>${l.t}</h4>
-                    <p>${l.d}</p>
-                    <small style="color:var(--p)">Pristupi gradivu →</small>
-                </div>`;
-            });
-            section += `</div></div>`;
-            display.innerHTML += section;
-        }
+const baza = {
+    'os': {
+        'HRVATSKI JEZIK': [
+            { t: 'Padeži (Svi)', d: 'Nauči tko? što? koga? čega? u minuti.', c: '<h2>Padeži - Brzo pamćenje</h2><p>Padeža ima 7. Svaki ima svoja pitanja:</p><ul><li><b>N:</b> Tko? Što? (Mama spava)</li><li><b>G:</b> Koga? Čega? (Nema mame)</li><li><b>D:</b> Komu? Čemu? (Prilazim mami)</li><li><b>A:</b> Koga? Što? (Vidim mamu)</li><li><b>V:</b> Oj! Ej! (Oj, mamo!)</li><li><b>L:</b> O kome? O čemu? (Pričam o mami)</li><li><b>I:</b> S kime? Čime? (Šetam s mamom)</li></ul><div class="example"><b>Trik:</b> Ako ne znaš koji je padež, zamijeni riječ s imenicom "žaba". Padež će odmah biti jasniji!</div>' },
+            { t: 'Pravopis: Č i Ć', d: 'Kada ide tvrdo, a kada meko?', c: '<h2>Č i Ć - Pravila</h2><p><b>Č (tvrdo):</b> Često u riječima uvećanicama (lončina) ili u korijenu riječi poput <i>čovjek</i>.</p><p><b>Ć (meko):</b> Često u umanjenicama (lončić, ptičica) i u infinitivu glagola (pjevat<b>ć</b>u -> pjevat ću).</p>' }
+        ],
+        'MATEMATIKA': [
+            { t: 'Razlomci', d: 'Zbrajanje, oduzimanje i množenje.', c: '<h2>Razlomci</h2><p>Gornji broj je <b>brojnik</b>, donji je <b>nazivnik</b>.</p><div class="formula">1/2 + 1/4 = 2/4 + 1/4 = 3/4</div><div class="example"><b>Primjer:</b> Zamisli pizzu. Ako pojedeš 1/4, ostale su ti 3/4 pizze.</div>' }
+        ],
+        'GEOGRAFIJA': [
+            { t: 'Svemir i Zemlja', d: 'Planeti, Sunce i kretanje Zemlje.', c: '<h2>Zemlja u svemiru</h2><p>Zemlja se okreće oko svoje osi (<b>Rotacija</b> - traje 24h) i oko Sunca (<b>Revolucija</b> - traje 365 dana).</p><p><b>Planeti:</b> Merkur, Venera, Zemlja, Mars, Jupiter, Saturn, Uran, Neptun.</p>' }
+        ]
+    },
+    'ss': {
+        'FIZIKA': [
+            { t: 'Newtonovi zakoni', d: 'Tri temelja cijele fizike.', c: '<h2>Newtonovi zakoni</h2><p>1. <b>Zakon tromosti:</b> Tijelo miruje dok ga sila ne pokrene.</p><p>2. <b>Temeljni zakon gibanja:</b></p><div class="formula">F = m · a</div><p>3. <b>Akcija i Reakcija:</b> Svaka sila ima suprotnu silu iste jačine.</p>' }
+        ],
+        'KEMIJA': [
+            { t: 'Periodni sustav (PSE)', d: 'Metali, nemetali i atomi.', c: '<h2>Atomi i elementi</h2><p>Atom se sastoji od <b>protona</b> (+), <b>neutrona</b> (nema naboja) i <b>elektrona</b> (-).</p><div class="example"><b>Zanimljivost:</b> Vodik (H) je najlakši i najčešći element u svemiru!</div>' }
+        ],
+        'BIOLOGIJA': [
+            { t: 'Genetika i DNA', d: 'Kako nasljeđujemo osobine.', c: '<h2>DNA molekula</h2><p>DNA (DNK) nosi sve naše upute. Izgleda kao uvrnute ljestve. Sastoji se od baza: <b>A, T, C, G</b>.</p><p><b>Geni:</b> Određuju boju očiju, visinu, boju kose...</p>' }
+        ]
+    },
+    'med': {
+        'ANATOMIJA': [
+            { t: 'Krvožilni sustav', d: 'Srce, arterije i vene.', c: '<h2>Srce i krv</h2><p>Srce je pumpa. <b>Arterije</b> vode krv IZ srca (pune kisika), <b>Vene</b> vode krv U srce.</p><div class="example"><b>Činjenica:</b> Tvoje srce kuca oko 100,000 puta u jednom danu!</div>' }
+        ],
+        'ZDRAVSTVENA NJEGA': [
+            { t: 'Vitalni znakovi', d: 'Puls, tlak i temperatura.', c: '<h2>Mjerenje zdravlja</h2><ul><li><b>Puls:</b> Normalno 60-80 otkucaja.</li><li><b>Tlak:</b> Normalno 120/80 mmHg.</li><li><b>Temperatura:</b> Normalno do 37°C.</li></ul>' }
+        ]
+    },
+    'eko': {
+        'KNJIGOVODSTVO': [
+            { t: 'Dnevnik i Bilanca', d: 'Osnove knjiženja imovine.', c: '<h2>Bilanca</h2><p><b>Aktiva:</b> Ono što firma IMA (novac, strojevi).<br><b>Pasiva:</b> Odakle taj novac dolazi (dugovi, kapital).</p><div class="formula">AKTIVA = PASIVA</div>' }
+        ]
+    },
+    'teh': {
+        'INFORMATIKA': [
+            { t: 'Programiranje (Python)', d: 'Osnove koda za početnike.', c: '<h2>Uvod u Python</h2><p><b>Print:</b> Ispisuje tekst na ekran.<br><b>Variable:</b> Kutija u koju spremamo podatke.</p><div class="formula">print("Pozdrav svijetu!")</div>' }
+        ]
     }
+};
 
-    function view(cat, sub, idx) {
-        const lesson = data[cat][sub][idx];
-        document.getElementById('lessonText').innerHTML = lesson.c;
-        document.getElementById('viewer').style.display = 'block';
-        document.body.style.overflow = 'hidden';
+function prikazi(kat) {
+    const d = document.getElementById('display');
+    d.innerHTML = "";
+    
+    // Aktiviraj gumb
+    document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+
+    const predmeti = baza[cat];
+    for (let p in predmeti) {
+        let sekcija = `<div class="subject-name">${p}</div><div class="grid">`;
+        predmeti[p].forEach((lekcija, i) => {
+            sekcija += `<div class="card" onclick="otvori('${kat}', '${p}', ${i})">
+                <h3>${lekcija.t}</h3>
+                <p>${lekcija.d}</p>
+                <div style="margin-top:15px; color:var(--p); font-weight:bold;">Otvori lekciju →</div>
+            </div>`;
+        });
+        sekcija += `</div>`;
+        d.innerHTML += sekcija;
     }
+}
 
-    function closeV() {
-        document.getElementById('viewer').style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
+function otvori(kat, pred, i) {
+    document.getElementById('content').innerHTML = baza[kat][pred][i].c;
+    document.getElementById('viewer').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
 
-    window.onload = () => load('os');
+function zatvori() {
+    document.getElementById('viewer').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Početno učitavanje
+window.onload = () => {
+    // Simuliramo klik na prvi gumb
+    document.querySelector('.btn').click();
+};
 </script>
 
 </body>
